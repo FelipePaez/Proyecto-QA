@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Ejecutar explorador QA",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app_interactiva.py",
+      "args": ["--port", "8768"],
+      "console": "internalConsole",
+      "justMyCode": true,
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+    }
+  ]
+}

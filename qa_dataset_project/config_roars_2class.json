@@ -1,0 +1,20 @@
+{
+  "dataset": "roars_2class",
+  "format": "csv",
+  "encoding": "utf-8-sig",
+  "context_kind": "reading_comprehension_relevant_passage",
+  "score_scale": "0..1 (2-class human ground truth)",
+  "source_url": "https://github.com/owenhenkel/ROARS-dataset",
+  "fields": {
+    "context_text": "passage_text",
+    "question_text": "question_text",
+    "answer_text": "student_answer",
+    "score": "2class_human_groundtruth"
+  },
+  "keys": {
+    "source_id": "source_record_id",
+    "question_id": "question_source_id",
+    "context_id": "passage_text",
+    "answer_id": "source_record_id"
+  }
+}

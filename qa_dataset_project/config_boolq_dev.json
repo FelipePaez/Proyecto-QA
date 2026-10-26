@@ -1,0 +1,14 @@
+{
+  "dataset": "boolq_dev",
+  "format": "jsonl",
+  "context_kind": "wikipedia_passage",
+  "source_url": "https://huggingface.co/datasets/google/boolq",
+  "fields": {
+    "context_text": "passage",
+    "question_text": "question",
+    "answer_text": "answer"
+  },
+  "keys": {
+    "context_id": "passage"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "mi_corpus_csv",
+  "format": "csv",
+  "delimiter": ",",
+  "encoding": "utf-8-sig",
+  "context_kind": "paragraph",
+  "score_scale": "0..5",
+  "source_url": "https://example.org/dataset",
+  "fields": {
+    "context_text": "passage",
+    "question_text": "question",
+    "answer_text": "student_answer",
+    "reference_answer": "expected_answer",
+    "score": "grade"
+  },
+  "keys": {
+    "source_id": "record_id",
+    "context_id": "passage_id",
+    "question_id": "question_id",
+    "answer_id": "response_id"
+  }
+}

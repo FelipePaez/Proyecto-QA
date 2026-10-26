@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+**/.venv/
+**/venv/
+
+# Secretos locales
+.env
+.env.*
+!.env.example
+**/*KEY*.txt
+**/*key*.txt
+
+# Datasets originales: se descargan bajo demanda o los aporta el usuario
+/qa_dataset_project/originales/*
+!/qa_dataset_project/originales/.gitkeep
+
+# Datos generados, embeddings, bases vectoriales, cargas y archivos temporales
+/qa_dataset_project/resultados/
+/qa_dataset_project/trabajo/
+/qa_embedding_features/resultados/
+/qa_embedding_features/uploads/
+/qa_dataset_project/demo/salida_demo.json
+/qa_dataset_project/demo/respuestas.csv
+
+# Copias históricas locales
+/_archivo_anterior/
+
+# Sistemas operativos y editores
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/.ropeproject/

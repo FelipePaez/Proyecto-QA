@@ -1,0 +1,76 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Regenerar todas las bases",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/normalizar_datasets.py",
+      "args": ["--no-download"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Normalizar una base",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/normalizar_datasets.py",
+      "args": ["--dataset", "${input:datasetToNormalize}", "--no-download"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Añadir otra base",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/normalizar_datasets.py",
+      "args": [
+        "--no-download",
+        "--input", "${input:datasetPath}",
+        "--config", "${input:configPath}"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Buscar en las bases",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/buscar.py",
+      "args": ["${input:searchQuery}", "--limit", "10"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "datasetPath",
+      "type": "promptString",
+      "description": "Ruta del JSON, JSONL, CSV o TSV adicional"
+    },
+    {
+      "id": "datasetToNormalize",
+      "type": "pickString",
+      "description": "Base que quieres volver a normalizar",
+      "options": [
+        "squad2_train",
+        "squad2_dev",
+        "cmu_qa_v1.2",
+        "mohler_v1.0",
+        "mohler_v2.0",
+        "roars_2class",
+        "roars_3class"
+      ]
+    },
+    {
+      "id": "configPath",
+      "type": "promptString",
+      "description": "Ruta del archivo de configuración JSON"
+    },
+    {
+      "id": "searchQuery",
+      "type": "promptString",
+      "description": "Texto que quieres encontrar en preguntas, respuestas o contextos"
+    }
+  ]
+}

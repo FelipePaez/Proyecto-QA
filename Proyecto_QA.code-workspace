@@ -1,0 +1,14 @@
+{
+  "folders": [
+    { "name": "Normalización", "path": "qa_dataset_project" },
+    { "name": "Embeddings y vista", "path": "qa_embedding_features" }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "python.terminal.activateEnvironment": true
+  },
+  "extensions": {
+    "recommendations": ["ms-python.python"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "dataset": "mi_corpus_json",
+  "format": "json",
+  "records_path": "data.*.paragraphs.*.qas.*",
+  "context_kind": "paragraph",
+  "score_scale": null,
+  "source_url": "https://example.org/dataset",
+  "fields": {
+    "context_text": "../../context",
+    "question_text": "question",
+    "answer_text": "answers.*.text",
+    "reference_answer": "answers.*.text",
+    "is_unanswerable": "is_impossible"
+  },
+  "keys": {
+    "source_id": "id",
+    "context_id": "../../context",
+    "question_id": "id"
+  }
+}

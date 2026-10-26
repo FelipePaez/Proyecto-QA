@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Normalizar conjuntos",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/normalizar_datasets.py", "--no-download"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ]
+}
