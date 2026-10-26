@@ -26,7 +26,7 @@ Aplicación local para importar, normalizar y explorar conjuntos de datos de pre
 Clona el repositorio desde una terminal:
 
 ```bash
-git clone https://github.com/<tu-usuario>/Proyecto-QA.git
+git clone https://github.com/FelipePaez/Proyecto-QA.git
 cd Proyecto-QA
 ```
 
@@ -168,3 +168,4 @@ El código no concede derechos sobre los datos de terceros. Descarga cada fuente
 - [ROARS](https://github.com/owenhenkel/ROARS-dataset) — su fuente indica condiciones CC BY-NC 4.0; confirma los términos actuales antes de uso o redistribución.
 
 No se incluye una licencia de software en este repositorio todavía. Si quieres permitir que otras personas reutilicen o modifiquen el código, el propietario debe elegir y añadir una licencia explícita.
+
