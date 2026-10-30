@@ -2,7 +2,7 @@
 
 Este componente lee las exportaciones JSONL del normalizador y crea una vista detallada por respuesta. Para cada fila guarda los IDs originales, referencias a embeddings, siete similitudes coseno, los párrafos seleccionados y los objetivos disponibles.
 
-El programa prepara características y conjuntos de datos para análisis, evaluación o entrenamiento posterior. No ajusta parámetros de un modelo ni genera respuestas predichas.
+El programa prepara características y ofrece entrenamiento supervisado local con scikit-learn. Los modelos predicen un objetivo etiquetado, como una calificación o categoría; no generan texto de respuesta.
 
 ## Relación con el normalizador
 
@@ -191,6 +191,22 @@ Abre **Preparar datos de entrenamiento** para importar una fuente directamente:
 Esta importación genera su configuración y archivos normalizados bajo resultados/importaciones/<id>/, la vista bajo resultados/<nombre>/ y sus vectores en ChromaDB. No agrega automáticamente el archivo a qa_dataset_project/resultados/.
 
 El nombre debe ser nuevo para conservar las vistas existentes. Para quitar una vista, selecciónala y pulsa **Eliminar base**. La aplicación pide confirmación; al confirmar elimina la vista y sus exportaciones, y borra el archivo de importación local si ninguna otra vista lo comparte. Los archivos fuente y resultados normalizados del proyecto normalizador permanecen. ChromaDB conserva los vectores compartidos, que podrán reutilizarse si se procesa otra vez la base.
+
+## Entrenamiento supervisado desde la interfaz
+
+La pestaña **Entrenar modelos** permite escoger cualquier vista normalizada o importada que tenga características listas. Para crear una vista nueva, usa **Preparar datos** y luego selecciónala en el campo **Base para entrenar**.
+
+1. Escoge **Regresión** para predecir `targets.score`, o **Clasificación** para predecir `targets.is_unanswerable`, `targets.answer_text` o valores discretos de `targets.score` como categorías.
+2. Elige el algoritmo, las características de entrada y el porcentaje reservado para prueba. Las características pueden ser las siete similitudes coseno, texto convertido mediante TF-IDF, vectores completos recuperados desde ChromaDB o combinaciones de estas opciones. Al usar vectores se selecciona una muestra reproducible de hasta 1.000 registros para controlar la memoria.
+3. Activa la optimización solo si deseas comparar combinaciones de hiperparámetros. La búsqueda usa validación cruzada en la partición de entrenamiento, con semilla fija para repetir la separación.
+4. Pulsa **Entrenar y evaluar**. Los valores objetivo ausentes se excluyen. Para clasificación, la partición se estratifica para mantener representación de las clases; se informa claramente si faltan ejemplos suficientes.
+5. Revisa las métricas y descarga el ZIP del modelo, el JSON de configuración y métricas o el CSV de predicciones para los registros de prueba.
+
+La regresión informa MAE y RMSE (errores, menor es mejor) y R². La clasificación informa accuracy, balanced accuracy, F1 macro, precisión macro y recall macro. Son medidas del conjunto de prueba de esa ejecución y deben interpretarse considerando el tamaño, equilibrio y calidad de las etiquetas.
+
+Los archivos se guardan en `resultados/modelos_entrenados/`. El ZIP contiene un pipeline `joblib` con el preprocesamiento y el estimador, más métricas y predicciones. Instala las dependencias del mismo `requirements.txt` al cargar el modelo y usa joblib solo con artefactos de confianza.
+
+La clasificación de `answer_text` interpreta cada respuesta esperada distinta como una clase. Conviene cuando existen respuestas repetidas y pocas clases. Una tarea con muchas respuestas únicas no es una clasificación útil. Para esos datasets, prepara una etiqueta de categoría apropiada o usa regresión si existe una calificación numérica.
 
 ## Objetivos y límites de entrenamiento
 

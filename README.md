@@ -2,7 +2,7 @@
 
 Aplicación local para importar, normalizar y explorar conjuntos de datos de preguntas y respuestas. El proyecto permite conservar una fuente original, convertirla a un esquema común y, opcionalmente, calcular embeddings y similitudes para análisis o preparación de datos de entrenamiento.
 
-> **Importante:** el repositorio contiene código y ejemplos de uso; no distribuye los datasets originales ni resultados generados. Cada dataset conserva sus propios términos de acceso, licencia y redistribución. El programa no entrena por sí mismo un modelo ni infiere respuestas: prepara y explora datos y características.
+> **Importante:** el repositorio contiene código y ejemplos de uso; no distribuye los datasets originales ni resultados generados. Cada dataset conserva sus propios términos de acceso, licencia y redistribución. El entrenamiento local con scikit-learn es supervisado: requiere etiquetas disponibles y produce predicciones para el objetivo elegido; no genera texto de respuesta.
 
 ## Qué incluye
 
@@ -10,7 +10,8 @@ Aplicación local para importar, normalizar y explorar conjuntos de datos de pre
 - **IDs trazables**: IDs de contexto, pregunta, respuesta, calificación y párrafo relacionados entre sí y con su procedencia.
 - **Explorador web local**: busca en fuentes originales, exportaciones normalizadas y vistas con embeddings.
 - **Características semánticas**: embeddings de pregunta, respuesta y párrafos; centroide del contexto; similitudes coseno.
-- **Preparación de datos de entrenamiento**: importación, asignación de campos y exportación en CSV, JSON o JSONL.
+- **Preparación y entrenamiento supervisado**: importación, asignación de campos, regresión para calificaciones y clasificación para categorías o respuestas esperadas.
+- **Evaluación y descarga de modelos**: partición separada de prueba, optimización opcional, métricas y paquete descargable con el modelo.
 - **Almacenamiento vectorial local** con ChromaDB para reutilizar los embeddings calculados.
 
 ## Requisitos
@@ -58,7 +59,7 @@ qa_embedding_features/.venv/bin/python -m pip install --upgrade pip
 qa_embedding_features/.venv/bin/python -m pip install -r qa_embedding_features/requirements.txt
 ```
 
-El normalizador usa la biblioteca estándar de Python. ChromaDB es la dependencia externa de la aplicación de embeddings y del explorador.
+El normalizador usa la biblioteca estándar de Python. ChromaDB guarda los vectores; scikit-learn, pandas y joblib permiten preparar características, entrenar y exportar modelos.
 
 ## Primera ejecución: descargar y normalizar SQuAD 2.0 dev
 
@@ -99,7 +100,7 @@ Abre [http://127.0.0.1:8768/](http://127.0.0.1:8768/) en tu navegador. Mantén a
 La interfaz ofrece tres secciones:
 
 1. **Explorar bases**: búsqueda por texto, campos, IDs y similitudes calculadas; paginación, detalle y descarga.
-2. **Preparar datos de entrenamiento**: carga un archivo, asigna campos, calcula características y exporta las columnas elegidas.
+2. **Preparar entrenamiento**: carga un archivo, asigna pregunta, respuesta, contexto y objetivos; calcula características, exporta los datos y entrena un modelo supervisado.
 3. **Añadir / normalizar bases**: guarda el original para explorarlo sin cambios, o normaliza el archivo y crea IDs relacionados.
 
 ## Calcular embeddings (opcional)
@@ -119,6 +120,20 @@ Cuando hayas revisado la prueba, quita `--limit 3` para generar la vista complet
 ```
 
 La clave también se puede pasar mediante la variable de entorno `OPENAI_API_KEY`. No pegues claves en el código, README, configuraciones que vayan al repositorio, capturas ni commits. Si una clave se publica por accidente, revócala desde el panel del proveedor y crea otra.
+
+## Entrenar y evaluar un modelo
+
+Abre la pestaña **Entrenar modelos**. Puedes seleccionar cualquier vista normalizada o importada que ya tenga características calculadas. Para crear una vista nueva, usa antes **Preparar datos**, asigna los campos, procesa el archivo y luego selecciona la base nueva en el selector de entrenamiento.
+
+1. Escoge regresión para predecir `Calificación` numérica, o clasificación para `¿No se puede responder?`, `Respuesta esperada` o una calificación discreta tratada como categoría.
+2. Selecciona el algoritmo disponible para esa tarea y las entradas: similitudes coseno, textos procesados con TF-IDF, vectores de embeddings recuperados desde ChromaDB o combinaciones de estas características. Al usar vectores completos se selecciona una muestra reproducible de hasta 1.000 registros para controlar el consumo de memoria.
+3. Elige la proporción de registros que se guardará para evaluación. Esa partición queda separada del ajuste del modelo.
+4. Si lo deseas, activa la búsqueda de hiperparámetros. Compara configuraciones usando validación cruzada dentro de los datos de entrenamiento y puede tardar más.
+5. Pulsa **Entrenar y evaluar**. La interfaz muestra métricas, número de registros usados y omitidos y habilita la descarga.
+
+Se generan un pipeline `joblib`, un JSON con métricas y configuración y un CSV con las predicciones del conjunto de evaluación. Los archivos se guardan en `qa_embedding_features/resultados/modelos_entrenados/`; puedes descargar el paquete ZIP y también las métricas y predicciones individuales. El pipeline incluye el preprocesamiento (imputación, escalado y TF-IDF), así que recibe los mismos campos de características en inferencia.
+
+Los modelos clasifican etiquetas existentes: no redactan respuestas nuevas. La opción `Respuesta esperada` funciona como clasificación solo si varias filas comparten las mismas respuestas; si casi todas son distintas, el objetivo no es adecuado. Evalúa la distribución y calidad de las etiquetas antes de interpretar las métricas.
 
 ## Dónde se guardan los datos
 
